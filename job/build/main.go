@@ -1,0 +1,29 @@
+package main
+
+import (
+	"flag"
+	"github.com/HaleyLeoZhang/go-component/driver/bootstrap"
+	"github.com/HaleyLeoZhang/go-component/driver/xlog"
+	"search_gateway/api/conf"
+	"search_gateway/api/service"
+)
+
+func main() {
+	flag.Parse()
+	if err := conf.Init(); err != nil {
+		panic(err)
+	}
+
+	oneService := service.New(conf.Conf)
+	xlog.Init(conf.Conf.Log)
+
+	app := bootstrap.New()
+	app.Start(func() { // 此部分代码，请勿阻塞进程
+		// 通知错误
+		// TODO 功能规划中 2021-1-9 20:12:55
+		return
+	}).Stop(func() {
+		oneService.Close()
+	})
+
+}

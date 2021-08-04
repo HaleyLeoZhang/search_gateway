@@ -1,0 +1,42 @@
+serviceName: search_gateway_debug
+
+db:
+  name: search_gateway_job
+  type: mysql
+  host: 127.0.0.1
+  port: 13306
+  database: yth_blog_avatar
+  user: root
+  password: s435d6f7g8ui
+  maxIdleConns: 5
+  maxOpenConns: 50
+  maxLeftTime: 30s
+
+redis:
+  name: search_gateway_debug
+  proto: tcp
+  addr: 127.0.0.1:6379
+  auth:
+  dialTimeout: 20ms
+  readTimeout: 20ms
+  writeTimeout: 20ms
+  expire: 10s
+  pool:
+    maxActive: 20
+    maxIdle: 10
+    idleTimeout: 80s
+
+elastic:
+  addrs:
+    - "http://127.0.0.1:9200"
+  username: ""
+  password: ""
+  healthcheckEnabled: true
+  snifferEnabled: false
+  healthtimeout: "3s"
+  snifferTimeout: "3s"
+
+log:
+  name: search_gateway_debug
+  stdout: true
+  dir: ""
