@@ -92,8 +92,9 @@ func (s *Service) BlogFrontFlushAll() {
 				_, err := s.EsDao.Update().Index(doc.GetIndex()).Id(doc.GetIdString()).Doc(doc).DocAsUpsert(true).Do(ctx)
 				if err != nil {
 					xlog.Errorf("BlogFrontFlushAll Err(%+v) id(%v)", err, doc.Id)
+					return nil
 				}
-				xlog.Errorf("BlogFrontFlushAll Success(%+v) id(%v)", err, doc.Id)
+				xlog.Infof("BlogFrontFlushAll Success(%+v) id(%v)", err, doc.Id)
 				return nil
 			})
 		}
@@ -138,7 +139,7 @@ func (s *Service) BlogFrontSearch(ctx context.Context, req *vo.BlogFrontRequest)
 		From(offset).Size(limit). // 取数据区间
 		Query(search).
 		FetchSourceContext(esSdk.NewFetchSourceContext(true).Include(fields...)).
-		Do(ctx)
+		Do(context.Background())
 	if err != nil {
 		err = errors.WithStack(err)
 		return

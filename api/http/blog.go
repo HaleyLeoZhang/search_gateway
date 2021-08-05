@@ -9,6 +9,7 @@ package http
 import (
 	"github.com/HaleyLeoZhang/go-component/driver/xgin"
 	"github.com/gin-gonic/gin"
+	"github.com/golang/groupcache/singleflight"
 	"search_gateway/common/model/vo"
 )
 
@@ -28,13 +29,12 @@ func (*Blog) Front(c *gin.Context) {
 		return
 	}
 
-	//g := &singleflight.Group{}
-	//groupKey := httpSingleFightKey("blog_front", param)
-	//res, err := g.Do(groupKey, func() (data interface{}, errBusiness error) {
-	//	data, errBusiness = srv.CommonService.BlogFrontSearch(xGin.C, param)
-	//	return
-	//})
-	res, err:= srv.CommonService.BlogFrontSearch(xGin.C, param)
-
+	// 幂等请求，防止击穿 说明文档 https://segmentfault.com/a/1190000018464029
+	g := &singleflight.Group{}
+	groupKey := httpSingleFightKey("blog_front", param)
+	res, err := g.Do(groupKey, func() (data interface{}, errBusiness error) {
+		data, errBusiness = srv.CommonService.BlogFrontSearch(xGin.C, param)
+		return
+	})
 	xGin.Response(err, res)
 }

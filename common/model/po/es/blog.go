@@ -43,7 +43,9 @@ func (b *Blog) GetMapping() string {
 	            "search_analyzer":"ik_smart"
 	        },
 	        "category":{
-	            "type":"keyword"
+	            "type":"text",
+	            "analyzer":"ik_smart",
+	            "search_analyzer":"ik_smart"
 	        }
 	    }
 	}

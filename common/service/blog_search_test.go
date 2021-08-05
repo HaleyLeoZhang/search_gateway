@@ -23,3 +23,10 @@ func TestService_BlogFrontSearch(t *testing.T) {
 	b, _ := json.Marshal(list)
 	t.Logf("list(%v)", string(b))
 }
+
+func TestService_BlogFrontIni(t *testing.T) {
+	err := svr.BlogFrontIni()
+	if err != nil {
+		t.Fatalf("Err(%+v)", err)
+	}
+}

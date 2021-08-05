@@ -39,7 +39,7 @@ func Init() (err error) {
 	if confPath != "" {
 		yamlFile, err = filepath.Abs(confPath)
 	} else {
-		yamlFile, err = filepath.Abs("../build/app.yaml")
+		yamlFile, err = filepath.Abs("./job/build/app.yaml")
 	}
 	if err != nil {
 		return
