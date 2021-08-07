@@ -1,4 +1,5 @@
 **/app.yaml
+common/conf/debug.yaml
 **/.idea
 **/.DS_Store
 app_api
