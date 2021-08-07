@@ -16,7 +16,7 @@ func Init(e *gin.Engine, srvInjection *service.Service) *gin.Engine {
 	{
 		blog := &Blog{}
 		i := e.Group("blog/")
-		i.GET("front/", blog.Front) // 前台搜素
+		i.GET("front", blog.Front) // 前台搜素
 	}
 
 	return e
