@@ -123,13 +123,13 @@ func (s *Service) BlogFrontSearch(ctx context.Context, req *vo.BlogFrontRequest)
 		search.Must(esSdk.NewTermsQuery("id", *req.Id))
 	}
 	if req.Title != "" {
-		search.Should(esSdk.NewTermsQuery("title", req.Title))
+		search.Should(esSdk.NewMatchQuery("title", req.Title))
 	}
 	if req.Describe != "" {
-		search.Should(esSdk.NewTermsQuery("describe", req.Describe))
+		search.Should(esSdk.NewMatchQuery("describe", req.Describe))
 	}
 	if req.Category != "" {
-		search.Should(esSdk.NewTermsQuery("category", req.Category))
+		search.Should(esSdk.NewMatchQuery("category", req.Category))
 	}
 	// - 计算分页
 	offset := req.GetOffset()

@@ -13,9 +13,11 @@ import (
 	"search_gateway/common/model/vo"
 )
 
-type Blog struct{}
+type Blog struct {
+	singleFlightFront singleflight.Group // 接口级缓存 幂等请求，防止击穿 说明文档 https://segmentfault.com/a/1190000018464029
+}
 
-func (*Blog) Front(c *gin.Context) {
+func (b *Blog) Front(c *gin.Context) {
 	xGin := xgin.NewGin(c)
 	var (
 		err   error
@@ -30,9 +32,8 @@ func (*Blog) Front(c *gin.Context) {
 	}
 
 	// 幂等请求，防止击穿 说明文档 https://segmentfault.com/a/1190000018464029
-	g := &singleflight.Group{}
 	groupKey := httpSingleFightKey("blog_front", param)
-	res, err := g.Do(groupKey, func() (data interface{}, errBusiness error) {
+	res, err := b.singleFlightFront.Do(groupKey, func() (data interface{}, errBusiness error) {
 		data, errBusiness = srv.CommonService.BlogFrontSearch(xGin.C, param)
 		return
 	})
