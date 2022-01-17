@@ -191,7 +191,7 @@ func (s *Service) BlogFrontIni() (err error) {
 		return
 	}
 	if !b {
-		createIndex, errBusiness := s.EsDao.CreateIndex(doc.GetIndex()).Body(doc.GetMapping()).Do(ctx)
+		createIndex, errBusiness := s.EsDao.CreateIndex(doc.GetIndexOriginal()).Body(doc.GetMapping()).Do(ctx)
 		if errBusiness != nil {
 			err = errors.WithStack(fmt.Errorf("NewClient err(%+v)", errBusiness))
 			return
