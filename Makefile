@@ -1,11 +1,11 @@
-all: job
+all: debug_job
 
-api:
+debug_api:
 	@clear
 	@echo "App API debug is loading"
 	@go run ./api/build/main.go -conf=./api/build/app.yaml
 
-job:
+debug_job:
 	@clear
 	@echo "App JOB debug is loading"
 	@go run ./job/build/main.go -conf=./job/build/app.yaml

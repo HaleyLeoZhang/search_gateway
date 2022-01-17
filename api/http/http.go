@@ -16,7 +16,7 @@ func Init(e *gin.Engine, srvInjection *service.Service) *gin.Engine {
 	{
 		blog := &Blog{}
 		i := e.Group("blog/")
-		i.GET("front", blog.Front) // 前台搜素
+		i.GET("front", blog.Front) // 前台搜素-目前搜索条件少，暂时用GET就可以了，如果后面字段上升到10个，需要改成POST
 	}
 
 	return e

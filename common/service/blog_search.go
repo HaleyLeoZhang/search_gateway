@@ -17,7 +17,8 @@ import (
 
 // 博客主搜
 
-// Part 刷全量数据脚本
+// Part 刷全量数据脚本 - 后面有时间了，改成完整流程
+// - 推送kafka消息去统一更新 TODO
 func (s *Service) BlogFrontFlushAll() {
 	var (
 		err error
