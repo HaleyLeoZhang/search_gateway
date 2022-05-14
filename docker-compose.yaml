@@ -15,10 +15,13 @@ services:
         environment:
             TZ: Asia/Shanghai
             NODE_ENV: production
+            GO111MODULE: "on"
+            GOPROXY: https://goproxy.io
+            TERM: xterm
         networks:
             default:
                 ipv4_address: 172.38.0.4
-        command:  bash -c "export GO111MODULE=on && export GOPROXY=https://goproxy.io && export TERM=xterm && cd /app && go mod tidy && make debug_job" # 调试阶段
+        command:  bash -c "cd /app && go mod tidy && make debug_job" # 调试阶段
 
 networks:
     default:
