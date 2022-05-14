@@ -18,6 +18,7 @@ func New(cfg *conf.Config) *Service {
 	cfgCommon.DB = cfg.DB
 	cfgCommon.Redis = cfg.Redis
 	cfgCommon.Es = cfg.Es
+	cfgCommon.Kafka = cfg.Kafka
 	s.CommonService = commonservice.New(cfgCommon)
 	return s
 }

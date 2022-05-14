@@ -1,19 +1,19 @@
 package service
 
 import (
-	"github.com/HaleyLeoZhang/go-component/driver/xelastic"
 	"github.com/HaleyLeoZhang/go-component/driver/xlog"
 	"search_gateway/common/conf"
 	"search_gateway/common/dao/cache"
+	"search_gateway/common/dao/es"
+	"search_gateway/common/dao/kafka"
 	"search_gateway/common/dao/yth_blog_avatar"
-
-	v7 "github.com/olivere/elastic/v7"
 )
 
 type Service struct {
 	BlogDao  *yth_blog_avatar.Dao
-	EsDao    *v7.Client
+	EsDao    *es.Dao
 	CacheDao *cache.Dao
+	producer *kafka.Dao
 }
 
 func New(cfg *conf.Config) *Service {
@@ -22,17 +22,23 @@ func New(cfg *conf.Config) *Service {
 		s.CacheDao = cache.New(cfg.Redis)
 	}
 	if cfg.Es != nil {
-		s.EsDao, _ = xelastic.NewV7(cfg.Es)
+		s.EsDao = es.New(cfg.Es)
 	}
 	if cfg.DB != nil {
 		s.BlogDao = yth_blog_avatar.New(cfg.DB)
+	}
+	if cfg.Kafka != nil {
+		s.producer = kafka.New(cfg.Kafka)
 	}
 	return s
 }
 
 // Close close the resource.
 func (s *Service) Close() {
-	// 各种消费者
+	// 各种MQ的生产、消费者
+	if s.producer != nil {
+		s.producer.Close()
+	}
 	// - 暂无
 	// 各种数据库
 	// - 平滑关闭，建议数据库相关的关闭放到最后

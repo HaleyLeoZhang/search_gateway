@@ -3,6 +3,7 @@ package conf
 import (
 	"github.com/HaleyLeoZhang/go-component/driver/db"
 	"github.com/HaleyLeoZhang/go-component/driver/xelastic"
+	"github.com/HaleyLeoZhang/go-component/driver/xkafka"
 	"github.com/HaleyLeoZhang/go-component/driver/xredis"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -19,6 +20,7 @@ type Config struct {
 	DB    *db.Config       `yaml:"db" json:"db"`
 	Redis *xredis.Config   `yaml:"redis" json:"redis"`
 	Es    *xelastic.Config `yaml:"elastic" json:"elastic"`
+	Kafka *xkafka.Config   `yaml:"kafka" json:"kafka"`
 }
 
 func init() {

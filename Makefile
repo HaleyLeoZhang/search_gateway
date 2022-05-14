@@ -66,3 +66,9 @@ test:
 	@# 指定测试
 	@go test -v ./api/service/ -conf=../../api/build/app.yaml
 	@echo "Test --- END"
+
+# 语法检测
+lint:
+	@echo "Golint  Scaning"
+	@golangci-lint run --config ./lint-ci.yml
+	@echo "Golint  PASS"

@@ -3,6 +3,7 @@ package conf
 import (
 	"flag"
 	"github.com/HaleyLeoZhang/go-component/driver/xelastic"
+	"github.com/HaleyLeoZhang/go-component/driver/xkafka"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"path/filepath"
@@ -28,6 +29,7 @@ type Config struct {
 	Redis       *xredis.Config     `yaml:"redis" json:"redis"`
 	Es          *xelastic.Config   `yaml:"elastic" json:"elastic"`
 	Log         *xlog.Config       `yaml:"log" json:"log"`
+	Kafka       *xkafka.Config     `yaml:"kafka" json:"kafka"`
 }
 
 func init() {
