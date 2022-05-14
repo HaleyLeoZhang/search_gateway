@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"flag"
-	"search_gateway/api/conf"
 	"os"
+	"search_gateway/job/conf"
 	"testing"
 )
 
@@ -14,7 +14,7 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	flag.Parse()
+	flag.Set("conf", "../build/app.yaml")
 	err := conf.Init()
 	if err != nil {
 		panic(err)
