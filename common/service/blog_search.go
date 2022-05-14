@@ -127,7 +127,7 @@ func (s *Service) blogSearchEsSendAll(ctx context.Context) {
 			return
 		}
 		for _, item := range list {
-			// 通知任务ES更新 PV、UV等数据
+			// 通知ES更新
 			_ = s.producer.NotifyBlogSearch(ctx, item.Id, constant.ES_UPDATE, "blogSearchEsSendAll")
 		}
 		minId = list[len(list)-1].Id

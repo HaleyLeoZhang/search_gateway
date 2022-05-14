@@ -23,7 +23,7 @@ func TestService_BlogFrontSearch(t *testing.T) {
 
 func TestService_blogSearchEsSendAll(t *testing.T) {
 	svr.blogSearchEsSendAll(ctx)
-	<-time.After(3 * time.Second) // 异步发送消息
+	<-time.After(5 * time.Second) // 异步发送消息
 }
 
 func TestService_blogSearchAssemble(t *testing.T) {
