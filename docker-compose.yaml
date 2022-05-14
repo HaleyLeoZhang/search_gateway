@@ -2,23 +2,23 @@ version: '3.0'
 
 services:
 
-    hlz-go:
-        image: golang:1.15
-        container_name: puppeteer-go-app
+    search_gateway:
+        image: golang:1.16
+        container_name: search-gateway
         working_dir: /app
         restart: always
         volumes:
-            - /data/www/site/puppeteer.hlzblog.top:/app:cached # 重要！！！ 此部分请依据自己的项目位置 进行调整
-            - /tmp/comic_api:/tmp/comic_api:cached
+            - /data/www/site/search_gateway:/app:cached # 重要！！！ 此部分请依据自己的项目位置 进行调整
+            - /tmp/search_gateway_job.log:/tmp/job.log:cached
         ports:
-            - 8100:8100
+            - 12315:8100
         environment:
             TZ: Asia/Shanghai
             NODE_ENV: production
         networks:
             default:
                 ipv4_address: 172.38.0.2
-        command:  bash -c "export GO111MODULE=on && export GOPROXY=https://goproxy.io && export TERM=xterm && mkdir -p /tmp/comic_api && cd /app && make cr"
+        command:  bash -c "export GO111MODULE=on && export GOPROXY=https://goproxy.io && export TERM=xterm && cd /app && make debug_job" # 调试阶段
 
 networks:
     default:
