@@ -23,5 +23,7 @@ func (s *Service) initConsumers() {
 		PollTimeout: 3 * time.Second,
 		Handler:     s.commonService.KafkaBlogSearchEs, // 处理单条消息的函数
 		Mode:        xkafka.ModeBatch,                  // 消费模式
+		// - 平滑关闭
+		WaitGroup: s.wg,
 	})
 }

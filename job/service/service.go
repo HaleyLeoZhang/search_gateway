@@ -6,6 +6,7 @@ import (
 	comonnconf "search_gateway/common/conf"
 	commonservice "search_gateway/common/service"
 	"search_gateway/job/conf"
+	"sync"
 )
 
 type Service struct {
@@ -14,6 +15,8 @@ type Service struct {
 	// 全局上下文
 	ctx       context.Context // 带取消，等关闭进程的时候，自动触发关闭
 	ctxCancel context.CancelFunc
+	// 全局锁
+	wg *sync.WaitGroup
 }
 
 // New create service instance and return.
@@ -29,7 +32,8 @@ func New(cfg *conf.Config) *Service {
 	s.commonService = commonservice.New(cfgCommon)
 	// 初始化: 全局上下文
 	s.ctx, s.ctxCancel = context.WithCancel(context.Background())
-	// 初始
+	// 初始化: 全局锁
+	s.wg = &sync.WaitGroup{}
 	return s
 }
 
@@ -42,6 +46,7 @@ func (s *Service) Close() {
 	// 通知全局上文关闭
 	s.ctxCancel()
 	// 各种消费者
+	s.wg.Wait()
 	// - 暂无
 	// 各种数据库
 	// - 平滑关闭，建议数据库相关的关闭放到最后
