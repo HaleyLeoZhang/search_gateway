@@ -118,7 +118,7 @@ func (s *Service) blogSearchEsSendAll(ctx context.Context) {
 		// 查询
 		list, err := s.BlogDao.ArticleListByMinIdWithField(ctx, minId, batchNumber, "id")
 		if err != nil {
-			xlog.Infof("blogSearchEsSendAll minId(%v) Error(%+v)", minId, err)
+			xlog.Errorf("blogSearchEsSendAll minId(%v) Error(%+v)", minId, err)
 			return
 		}
 		lenList := len(list)
