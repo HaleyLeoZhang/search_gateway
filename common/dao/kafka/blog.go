@@ -7,7 +7,7 @@ import (
 	"search_gateway/common/model/kafka"
 )
 
-// 发送配色关联颜色任务ES消息
+// 发送博客主搜ES消息
 func (d *Dao) NotifyBlogSearch(ctx context.Context, id int64, action constant.EsAction, source string) (err error) {
 	err = checkNotify(id, source)
 	if err != nil {
