@@ -77,8 +77,8 @@ func (s *Service) blogSearchAssemble(ctx context.Context, id int64) (doc *es.Blo
 	if err != nil {
 		return
 	}
-	// 数据不存在；任务已完成；隐藏  都不进ES
-	if article == nil || article.IsDeleted == constant.IS_DELETED_YES { // 兼职的创建商品的，才用于搜索
+	// 数据不存在; 或者软删除  都不进ES
+	if article == nil || article.IsDeleted == constant.IS_DELETED_YES {
 		return
 	}
 	// 组装数据
