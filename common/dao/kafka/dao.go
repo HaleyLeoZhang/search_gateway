@@ -34,7 +34,7 @@ func checkNotify(id int64, source string) (err error) {
 	return
 }
 
-// 获取日志中心专属的Source开头
+// 获取当前服务专属的Source开头
 func getSourceNameForLogCenter(source string) string {
 	return fmt.Sprintf("searh_gateway_%v", source)
 }
