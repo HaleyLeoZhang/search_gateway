@@ -77,7 +77,7 @@ func (s *Service) blogSearchAssemble(ctx context.Context, id int64) (doc *es.Blo
 	if err != nil {
 		return
 	}
-	// 数据不存在; 或者软删除  都不进ES
+	// 数据不存在; 软删除  都不进ES
 	if article == nil || article.IsDeleted == constant.IS_DELETED_YES {
 		return
 	}
