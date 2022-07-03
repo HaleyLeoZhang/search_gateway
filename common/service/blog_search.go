@@ -50,7 +50,11 @@ func (s *Service) KafkaBlogSearchEs(ctx context.Context, message *sarama.Consume
 	)
 	err = json.Unmarshal(message.Value, msg)
 	doc, err = s.blogSearchAssemble(ctx, msg.Id)
-	if err == nil && doc == nil {
+	if err != nil {
+		xlog.Errorf("KafkaBlogSearch Err(%+v) msg(%v)", err, msg)
+		return
+	}
+	if doc == nil {
 		msg.Action = constant.ES_DELETE
 	}
 	switch msg.Action {
@@ -86,8 +90,8 @@ func (s *Service) blogSearchAssemble(ctx context.Context, id int64) (doc *es.Blo
 	eg.GOMAXPROCS(3)
 	// - 获取类目信息
 	eg.Go(func(context.Context) (errNil error) {
-		articleCategory, err = s.BlogDao.ArticleCategoryById(ctx, article.CateId)
-		if err != nil {
+		articleCategory, errNil = s.BlogDao.ArticleCategoryById(ctx, article.CateId)
+		if errNil != nil {
 			return
 		}
 		if article == nil {
@@ -95,7 +99,10 @@ func (s *Service) blogSearchAssemble(ctx context.Context, id int64) (doc *es.Blo
 		}
 		return
 	})
-	_ = eg.Wait()
+	err = eg.Wait()
+	if err != nil {
+		return
+	}
 
 	// 填充
 	doc = &es.Blog{
