@@ -3,6 +3,7 @@ package kafka
 import (
 	"context"
 	"encoding/json"
+	"github.com/HaleyLeoZhang/go-component/driver/xmetric"
 	"search_gateway/common/constant"
 	"search_gateway/common/model/kafka"
 )
@@ -13,13 +14,17 @@ func (d *Dao) NotifyBlogSearch(ctx context.Context, id int64, action constant.Es
 	if err != nil {
 		return
 	}
+	var topic = constant.KAFKA_TOPIC_BLOG_SEARCH
+	// 记录指标
+	xmetric.MetricProducer.WithLabelValues(topic).Inc()
+	// -
 	msg := &kafka.BlogSearch{}
 	msg.IniBaseData()
 	msg.Id = id
 	msg.Action = action
 	msg.Source = getSourceNameForLogCenter(source)
 	bs, _ := json.Marshal(msg)
-	err = d.producer.SendMsgAsyncByKey(constant.KAFKA_TOPIC_BLOG_SEARCH, msg.GetIdString(), bs)
+	err = d.producer.SendMsgAsyncByKey(topic, msg.GetIdString(), bs)
 	if err != nil {
 		return
 	}

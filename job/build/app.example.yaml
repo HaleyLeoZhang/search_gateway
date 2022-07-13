@@ -4,7 +4,8 @@ httpServer:
   name: search_gateway_job
   ip: 0.0.0.0
   port: 2333
-  pprof: false
+  pprof: false # true 开启  pprof 性能监控路由  注: 请勿开放到公网
+  metrics: true # true 开启  metrics 打点，支持 prometheus 主动来拉数据  注: 请勿开放到公网
   writeTimeout: 1s
   maxHeaderBytes: 1048576
 
@@ -91,7 +92,7 @@ kafka:
       backoff: 100ms # 在发送重试之前等待集群的最大时间
   consumer: #消费设置
     max_wait_time: 250ms #broker 等待 consumer的最大时间 默认毫秒为单位
-    max_processing_time : 100ms #默认毫秒为单位 consumer所期望的消息处理最大时间 如果超过 那么 partition将会停止拉取消息直到partition可以重新获取
+    max_processing_time: 100ms #默认毫秒为单位 consumer所期望的消息处理最大时间 如果超过 那么 partition将会停止拉取消息直到partition可以重新获取
     fetch: #设置对于请求可以拉取的字节数
       min: 1 #单次请求的最小字节数
       max: 0 #单次请求的最大字节数 0代表无限制
@@ -119,4 +120,4 @@ kafka:
   client_id: search_gateway #client_id 根据自己应用进行设置
   channel_buffer_size: 1024 # 所有的channel的长度
   version: 9 #版本设置 建议选择低于现在的版本
-  brokers_addr: [kafka.local.ops:9092] #brokers 地址
+  brokers_addr: [ kafka.local.ops:9092 ] #brokers 地址

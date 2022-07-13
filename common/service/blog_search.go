@@ -3,7 +3,9 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/HaleyLeoZhang/go-component/driver/xlog"
+	"github.com/HaleyLeoZhang/go-component/driver/xmetric"
 	"github.com/HaleyLeoZhang/go-component/errgroup"
 	"github.com/Shopify/sarama"
 	"search_gateway/common/constant"
@@ -44,6 +46,8 @@ func (s *Service) BlogFrontSearch(ctx context.Context, req *vo.BlogFrontRequest)
 
 //  消费端 处理ES数据
 func (s *Service) KafkaBlogSearchEs(ctx context.Context, message *sarama.ConsumerMessage) (err error) {
+	// 记录指标
+	xmetric.MetricConsumer.WithLabelValues(message.Topic, fmt.Sprintf("%v", message.Partition)).Inc()
 	var (
 		doc *es.Blog
 		msg = new(kafka.BlogSearch)
@@ -51,7 +55,7 @@ func (s *Service) KafkaBlogSearchEs(ctx context.Context, message *sarama.Consume
 	err = json.Unmarshal(message.Value, msg)
 	doc, err = s.blogSearchAssemble(ctx, msg.Id)
 	if err != nil {
-		xlog.Errorf("KafkaBlogSearch Err(%+v) msg(%v)", err, msg)
+		xlog.Errorf("KafkaBlogSearch Err(%+v) msg(%v)", err, msg.Marshal())
 		return
 	}
 	if doc == nil {
@@ -64,10 +68,10 @@ func (s *Service) KafkaBlogSearchEs(ctx context.Context, message *sarama.Consume
 		err = s.EsDao.DeleteEs(ctx, &es.Blog{Id: msg.Id})
 	}
 	if err != nil {
-		xlog.Errorf("KafkaBlogSearch Err(%+v) msg(%v)", err, msg)
+		xlog.Errorf("KafkaBlogSearch Err(%+v) msg(%v)", err, msg.Marshal())
 		return
 	}
-	xlog.Infof("KafkaBlogSearch Success msg(%v)", msg)
+	xlog.Infof("KafkaBlogSearch Success msg(%v)", msg.Marshal())
 	return
 }
 
@@ -114,7 +118,11 @@ func (s *Service) blogSearchAssemble(ctx context.Context, id int64) (doc *es.Blo
 	return
 }
 
-// 定时全量有效数据刷一遍ES - 推送数据
+func (s *Service) BlogSearchEsSendAll() {
+	s.blogSearchEsSendAll(context.Background())
+}
+
+// 全量有效数据刷一遍ES - 推送数据
 func (s *Service) blogSearchEsSendAll(ctx context.Context) {
 	var (
 		minId       = int64(0)

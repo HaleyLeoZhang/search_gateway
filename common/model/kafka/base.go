@@ -1,6 +1,7 @@
 package kafka
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
 	"search_gateway/common/constant"
@@ -27,4 +28,9 @@ func (baseMsg *kafkaMessageBase) GetIdString() string {
 func (baseMsg *kafkaMessageBase) IniBaseData() {
 	baseMsg.UniqueId = uuid.New().String()
 	baseMsg.Time = time.Now().Format(constant.BUSINESS_SHOW_TIME_TPL)
+}
+
+func (baseMsg *kafkaMessageBase) Marshal() string {
+	var by, _ = json.Marshal(baseMsg)
+	return string(by)
 }

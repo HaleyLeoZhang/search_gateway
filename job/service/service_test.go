@@ -14,7 +14,7 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	flag.Set("conf", "../build/app.yaml")
+	_ = flag.Set("conf", "../build/app.yaml")
 	err := conf.Init()
 	if err != nil {
 		panic(err)
